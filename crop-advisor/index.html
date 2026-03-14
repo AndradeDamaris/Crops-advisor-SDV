@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Crop Advisor</title>
+</head>
+<body>
+    <!-- qual estação, quanto de dinheiro e qual dia do mês está -->
+     <h1>Mini Crop Advisor</h1>
+     <form action="" id="formCalc">
+        <div class="estação">
+            <label for="season">estaçã atual</label>
+            <select name="season" id="season" required>
+                <option value="spring">primavera</option>
+                <option value="summer">verão</option>
+                <option value="autumn">outono</option>
+                <option value="winter">inverno</option>
+            </select>
+        </div>
+        <div class="money">
+            <label for="money">quantidade de ouro</label>
+            <input required type="number" name="money" id="money">
+        </div>
+        <div class="day">
+            <label for="day">dia atual</label>
+            <input required type="number" name="day" id="day">
+        </div>
+        <button type="submit">calcular</button>
+        </form>
+        <section>
+            <div class="result" id="result">
+                <!-- <p>melhor plantação:</p>
+                <p>dias para crescer:</p>
+                <p>valor:</p>
+                <p>lucro:</p> -->
+            </div>
+        </section>
+         <!-- <p>Qual estação você está?</p>
+         <input type="text" name="estação" id="estação">
+         <p>Qual dia?</p><input type="number" name="day" id="day">
+         <p>Quanto de dinheiro você tem?</p><input type="number" name="money" id="money">
+     </form>
+     <div class="result">
+         <p>valor gasto</p>
+         <p>lucro bruto</p>
+         <p>lucro</p>
+     </div> -->
+     <script src="script.js"></script>
+</body>
+</html>
