@@ -226,19 +226,22 @@ let form = document.getElementById("formCalc").addEventListener("submit", () => 
                 lucroBruto = Math.floor((finalCropsQuant + cropsQuantity) * crop.sendPrice );
             } else{
                 //lucro bruto
-                lucroBruto = Math.floor(finalCropsQuant * crop.sendPrice );
+                lucroBruto = Math.floor(cropsQuantity  * crop.sendPrice );
             }
 
             //comparar lucro se continuar crescendo ou nao
             if (crop.moreProduction === true) {
 
+
+
                 daysAfterFirstHarvest = Math.floor(restDays - crop.grow);//20 dias
 
                 regrowthQuant = Math.floor(daysAfterFirstHarvest / crop.regrowth + 1);//20/4+1 = 6
                 totalProfit = Math.floor(lucroBruto * regrowthQuant - moneyQuantity);//600 x 6 - 500 = 3100
+               
 
             } else {
-                totalProfit = Math.floor(crop.sendPrice * cropsQuantity - moneyQuantity);
+                totalProfit = Math.floor(lucroBruto - moneyQuantity);
             }
 
             //captar o melhor lucro a cada laço
