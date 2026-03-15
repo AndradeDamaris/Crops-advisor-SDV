@@ -1,159 +1,25 @@
 //IDEIAS NOVAS
 //1- SE ESTIVER NO ANO 1 MORANGO SO FICA DISPONIVEL NO DIA 13
-//2- SE FOR VERDADEIRO ESCOLHER ENTRE PLANTAR NO MESMO DIA OU DIA SEGUINTE (ALTERA QUANTAS COLHEITAS)
+//2- SE FOR VERDADEIRO MOSTRAR A DIFERENÇA ENTRE PLANTAR NO MESMO DIA OU DIA SEGUINTE (ALTERA QUANTAS COLHEITAS)
 //3- TEM ALGUMA HABILIDADE DE COLHEITA?
-//4- DESEJA REPLANTAR?
+//4- DESEJA REPLANTAR?---CONCLUIDA
 //5- PRINTAR AS OUTRAS COLOCACOES DE MELHOR LUCRO TBM
 
 
+//PROBLEMA: 
 
-let crops = [
-    {
-        name: "morango",
-        price: 100,
-        sendPrice: 120,
-        season: "spring",
-        grow: 8,
-        moreProduction: true,
-        regrowth: 4,
-        perc: 2,
-    },
-    {
-        name: "couve-flor",
-        price: 80,
-        sendPrice: 175,
-        season: "spring",
-        grow: 8,
-        moreProduction: false,
-        perc: null,
 
-    },
-    {
-        name: "batata",
-        price: 50,
-        sendPrice: 80,
-        season: "spring",
-        grow: 6,
-        moreProduction: false,
-        perc: 20,
-    },
-    {
-        name: "vagem",
-        price: 60,
-        sendPrice: 40,
-        season: "spring",
-        grow: 10,
-        moreProduction: true,
-        regrowth: 3,
-        perc: null,
-    },
-    {
-        name: "carambola",
-        price: 400,
-        sendPrice: 750,
-        season: "summer",
-        grow: 13,
-        moreProduction: false,
-        perc: null,
-    },
-    {
-        name: "melão",
-        price: 80,
-        sendPrice: 250,
-        season: "summer",
-        grow: 12,
-        moreProduction: false,
-        perc: null,
-    },
-    {
-        name: "mirtilo",
-        price: 80,
-        sendPrice: 50,
-        season: "summer",
-        grow: 13,
-        moreProduction: true,
-        regrowth: 4,
-        perc: 302,
-    },
-    {
-        name: "lúpulo",
-        price: 60,
-        sendPrice: 25,
-        season: "summer",
-        grow: 11,
-        moreProduction: true,
-        regrowth: 1,
-        perc: null,
-    },
-    {
-        name: "pimenta",
-        price: 40,
-        sendPrice: 40,
-        season: "summer",
-        grow: 5,
-        moreProduction: true,
-        regrowth: 1,
-        perc: 2,
-    },
-    {
-        name: "tomate",
-        price: 50,
-        sendPrice: 60,
-        season: "summer",
-        grow: 11,
-        moreProduction: true,
-        regrowth: 4,
-        perc: 2,
-    },
-    {
-        name: "abóbora",
-        price: 100,
-        sendPrice: 320,
-        season: "autumn",
-        grow: 13,
-        moreProduction: false,
-        perc: 2,
-    },
-    {
-        name: "berinjela",
-        price: 20,
-        sendPrice: 60,
-        season: "autumn",
-        grow: 5,
-        moreProduction: true,
-        regrowth: 5,
-        perc: 2,
-    },
-    {
-        name: "couve chinesa",
-        price: 50,
-        sendPrice: 80,
-        season: "autumn",
-        grow: 4,
-        moreProduction: false,
-        perc: 2,
-    },
-    {
-        name: "oxicoco",
-        price: 240,
-        sendPrice: 75,
-        season: "autumn",
-        grow: 7,
-        moreProduction: true,
-        regrowth: 5,
-        perc: 2,
-    },
-    {
-        name: "uva",
-        price: 60,
-        sendPrice: 80,
-        season: "autumn",
-        grow: 10,
-        moreProduction: true,
-        regrowth: 3,
-        perc: 2,
-    },
-];
+let crops = [];
+
+async function loadCrops(){
+
+const response = await fetch("crops.json");
+
+crops = await response.json();
+
+}
+
+loadCrops();
 
 let form = document.getElementById("formCalc").addEventListener("submit", () => {
     event.preventDefault();
@@ -210,6 +76,8 @@ let form = document.getElementById("formCalc").addEventListener("submit", () => 
 
         let finalCropsQuant = null
 
+        let checkMoreGrow = document.getElementById("more-grow")
+
 
         //laço pra percorrer o array e decidir o melhor lucro
         for (let i = 0; i < seasonChosed.length; i++) {
@@ -230,16 +98,14 @@ let form = document.getElementById("formCalc").addEventListener("submit", () => 
             }
 
             //comparar lucro se continuar crescendo ou nao
-            if (crop.moreProduction === true) {
+            if (checkMoreGrow.checked && crop.moreProduction === true) {
 
-
-
+                
                 daysAfterFirstHarvest = Math.floor(restDays - crop.grow);//20 dias
 
                 regrowthQuant = Math.floor(daysAfterFirstHarvest / crop.regrowth + 1);//20/4+1 = 6
                 totalProfit = Math.floor(lucroBruto * regrowthQuant - moneyQuantity);//600 x 6 - 500 = 3100
-               
-
+                
             } else {
                 totalProfit = Math.floor(lucroBruto - moneyQuantity);
             }
@@ -257,8 +123,6 @@ let form = document.getElementById("formCalc").addEventListener("submit", () => 
             }
         }
 
-
-        console.log(finalCropsQuant)
 
         //printar o resultado na tela
         let bestCropName = document.createElement("p");
@@ -283,20 +147,20 @@ let form = document.getElementById("formCalc").addEventListener("submit", () => 
 
         let regrowthYesNo = document.createElement("p");
         if (bestCrop.moreProduction === true) {
-            regrowthYesNo.textContent = "possível replantar: sim";
-            regrowthDays.textContent = `dias de recrescimento: ${bestCrop.regrowth} dias`;
+            regrowthYesNo.textContent = "continua produzindo: sim";
+            regrowthDays.textContent = `produz novamente de ${bestCrop.regrowth} em ${bestCrop.regrowth} dias`;
         } else {
-            regrowthYesNo.textContent = "possível replantar: não";
+            regrowthYesNo.textContent = "continua produzindo: não";
             replant.textContent = `possível replantar até: ${Math.floor(restDays / bestCrop.grow)} vezes`;
         }
 
 
         result.appendChild(bestCropName);
         result.appendChild(daysForGrow);
-        result.appendChild(regrowthYesNo);
-        result.appendChild(regrowthDays);
         result.appendChild(value);
         result.appendChild(cropTotal);
+        result.appendChild(regrowthYesNo);
+        result.appendChild(regrowthDays);
         result.appendChild(replant);
         result.appendChild(send);
 
