@@ -4,9 +4,7 @@
 //3- TEM ALGUMA HABILIDADE DE COLHEITA?
 //4- DESEJA REPLANTAR?---CONCLUIDA
 //5- PRINTAR AS OUTRAS COLOCACOES DE MELHOR LUCRO TBM
-
-
-//PROBLEMA: 
+//6- PRINTAR AS REPLANTAVEIS E AS NÃO REPLANTAVEIS E REMOVER O CHECKBOX
 
 
 let crops = [];
@@ -15,20 +13,26 @@ async function loadCrops(){
 
 const response = await fetch("crops.json");
 
-crops = await response.json();
+return response.json();
 
 }
 
-loadCrops();
+
+async function init(){
+
+crops = await loadCrops();
+
+}
+
+
+init();
 
 let form = document.getElementById("formCalc").addEventListener("submit", () => {
     event.preventDefault();
 
     //limpar o html
-    let result = document.getElementById("result");
+    let result = document.getElementById("result-normal");
     result.innerHTML = "";
-
-
 
     //configurar estação
     let season = document.getElementById("season").value;
@@ -43,12 +47,13 @@ let form = document.getElementById("formCalc").addEventListener("submit", () => 
     let money = document.getElementById("money").value;
     money = Number(money);
 
+   
 
     function calcBestCrop() {
 
 
         //variaveis
-        let bestCrop = null;
+        
         let bestProfit = 0;
 
 
@@ -61,14 +66,13 @@ let form = document.getElementById("formCalc").addEventListener("submit", () => 
         let lucroBruto = null;
         let totalProfit = null;
 
-        let bruteProfit = null;
-
         let crop = null;
 
+        let bestCrop = null;
+        let restDays = null
 
         let dayChosed = day;
-        let restDays = 29 - dayChosed;
-
+        restDays = 29 - dayChosed;
 
         let daysAfterFirstHarvest = null;
 
@@ -121,11 +125,19 @@ let form = document.getElementById("formCalc").addEventListener("submit", () => 
                 bruteProfit = lucroBruto;
 
             }
+
+        }
+        
+        //nao cresce se n tiver dias suficientes
+        if(restDays - bestCrop.grow < bestCrop.grow){
+            let error = document.createElement("p")
+            error.textContent = "não é possível crescrer"
+            result.appendChild(error)
         }
 
-
         //printar o resultado na tela
-        let bestCropName = document.createElement("p");
+        else{
+            let bestCropName = document.createElement("p");
         bestCropName.textContent = `melhor plantação: ${bestCrop.name}`;
 
         let daysForGrow = document.createElement("p");
@@ -164,25 +176,21 @@ let form = document.getElementById("formCalc").addEventListener("submit", () => 
         result.appendChild(replant);
         result.appendChild(send);
 
-
+    }
         console.log(`melhor plantação ${bestCrop.name}`);
         console.log(`quantidade possivel de comprar: ${cropsTotal}`);
         console.log(`melhor lucro possivel: ${bestProfit}`);
 
-
     }
 
+
     //validar dias e dinheiro
-    if (day > 0 && day <= 28 && money > 0) {
+    if (day > 0 && day <= 28  && money > 0) {
         //executar todo o codigo
         calcBestCrop();
     } else {
         console.log("ERROR");
     }
-
-
-
-    //funcao anonima pra calcular plantas q tem chance aleatoria de vir mais
 
 
 })
